@@ -1,0 +1,56 @@
+package com.ecommerce.config;
+
+import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+@Configuration
+public class CorsConfig {
+
+  @Bean
+  public CorsFilter corsFilter() {
+    CorsConfiguration config = new CorsConfiguration();
+
+    // 1. Allow credentials (cookies, authorization headers)
+    config.setAllowCredentials(true);
+
+    // 2. Allowed Frontend Origins (Update as needed for production)
+    config.setAllowedOriginPatterns(
+        List.of(
+            "https://fast-commerce-five.vercel.app",
+            "https://ecommerce-admin-two-phi.vercel.app",
+            "http://localhost:3000", // React / Next.js
+            "http://192.168.36.86:8081",
+            "http://192.168.36.40:8081",
+            "http://192.168.36.0:8081",
+            "http://192.168.36.1:8081",
+            "http://localhost:5173", // Vite / Vue / React
+            "http://localhost:4200", // Angular
+            "http://127.0.0.1:*"));
+
+    // 3. Allowed HTTP Headers
+    config.setAllowedHeaders(
+        List.of(
+            "Authorization",
+            "Cache-Control",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin"));
+
+    // 4. Allowed HTTP Methods
+    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+    // 5. Expose Headers (Required if your frontend reads custom headers or JWT
+    // tokens directly)
+    config.setExposedHeaders(List.of("Authorization", "Content-Disposition"));
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+
+    return new CorsFilter(source);
+  }
+}

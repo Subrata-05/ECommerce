@@ -1,0 +1,54 @@
+# 1. Custom Application Configuration (Bound to EnvConfig record)
+app:
+  security:
+    jwt:
+      secret: ${SECURITY_JWT_SECRET}
+      expiration: ${SECURITY_JWT_EXPIRATION:86400000}
+    admin:
+      email: ${SUPER_ADMIN_EMAIL}
+      password: ${SUPER_ADMIN_PASSWORD}
+  payment:
+    stripe:
+      secret-key: ${STRIPE_SECRET_KEY}
+      webhook-secret: ${STRIPE_WEBHOOK_SECRET}
+    chapa:
+      secret-key: ${CHAPA_SECRET_KEY}
+      webhook-secret: ${CHAPA_WEBHOOK_SECRET}
+      base-url: https://api.chapa.co/v1
+  file:
+    upload-dir: ./uploads
+  api:
+    base-url: ${API_URL}
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+# 2. Standard Spring Framework Configuration (Must be at root level)
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer: ERROR
+    # root: ERROR
+    # com.ecommerce: ERROR
+    # org.springframework.security: ERROR
+    # org.springframework.boot.autoconfigure: ERROR
