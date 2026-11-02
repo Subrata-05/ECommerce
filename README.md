@@ -1,127 +1,187 @@
-# 🛒 E-Commerce Backend REST API
+# E-Commerce Backend API
 
-A production-grade, secure RESTful e-commerce backend built with **Java 21**, **Spring Boot 3.4.2**, and **PostgreSQL**. Designed with layered architecture, JWT authentication, containerized deployments, and production deployment pipeline configurations.
+A RESTful e-commerce backend application developed using Java, Spring Boot, and PostgreSQL. The project follows a layered architecture and implements secure authentication, database management, and containerized application deployment.
 
----
+## Technology Stack
 
-## 🛠️ Tech Stack & Prerequisites
+| Category | Technology |
+|---|---|
+| Language | Java 21 |
+| Framework | Spring Boot 4.1.0 |
+| Database | PostgreSQL 16 |
+| ORM | Spring Data JPA, Hibernate |
+| Security | Spring Security, JWT |
+| Build Tool | Maven |
+| Containerization | Docker, Docker Compose |
+| API Documentation | OpenAPI / Swagger |
 
-### **Tech Stack**
+## Features
 
-* **Language:** Java 21
-* **Framework:** Spring Boot 3.4.2
-* **Database:** PostgreSQL 16 (Local Docker Container / Neon Cloud Postgres)
-* **Security:** Spring Security + JWT (Stateless)
-* **ORM & Migrations:** Spring Data JPA / Hibernate
-* **Containerization:** Docker Multi-Stage Builds & Docker Compose
-* **Build Tool:** Maven (`./mvnw`)
-* **Payment Gateways:** Stripe & Chapa Integrations
-* **Deployment Platform:** Render (Web Service)
+- RESTful API architecture
+- User authentication and authorization
+- JWT-based authentication
+- Role-based access control
+- Password encryption using password hashing
+- Product and category management
+- PostgreSQL database integration
+- Global exception handling
+- Request validation
+- Environment-based configuration
+- Docker-based application deployment
 
-### **Prerequisites**
+## Project Architecture
 
-* **JDK 21**
-* **Docker Desktop** (or Docker Engine + Docker Compose)
-* **Git**
-* **Bash** terminal (Linux, macOS, WSL, or Git Bash)
+The application follows a layered architecture to maintain separation of concerns and improve maintainability.
 
----
+```text
+src/main/java/com/ecommerce/
+│
+├── config/
+│   └── Application and security configurations
+│
+├── controller/
+│   └── REST API endpoints
+│
+├── dto/
+│   └── Data Transfer Objects
+│
+├── entity/
+│   └── Database entities
+│
+├── exception/
+│   └── Global exception handling
+│
+├── repository/
+│   └── Data access layer
+│
+└── service/
+    └── Business logic
+```
 
-## 🏗️ Architecture & Project Structure
+## Prerequisites
 
-The project follows standard layered architectural principles:
+Ensure the following tools are installed:
 
-src/main/java/com/ecommerce
- ├── config/          # Spring Security, JWT Filters, CORS & App Configs
- ├── controller/      # REST Endpoints (Controller Slice Tested)
- ├── dto/             # Data Transfer Objects & Validation Constraints
- ├── entity/          # JPA Domain Entities
- ├── exception/       # Global Exception Handler (@ControllerAdvice)
- ├── repository/      # Data Access Layer (Spring Data JPA)
- └── service/         # Business Logic Layer
+- Java Development Kit (JDK) 21
+- Docker Desktop
+- Git
+- Maven (optional when using Maven Wrapper)
 
----
-
-## 🚀 Quick Start (Local Development)
-
-We use a custom `run.sh` script to streamline container management, environment variable injection, and test executions.
+## Getting Started
 
 ### 1. Clone the Repository
 
-git clone https://github.com/bogaledemasrepo/ecommerce-backend-api.git
-cd ecommerce-backend-api
+```bash
+git clone https://github.com/Subrata-05/ECommerce.git
+cd ECommerce
+```
 
-### 2. Configure Local Environment
+### 2. Configure Environment Variables
 
-Ensure `.env.local` exists in the project root:
+Create a `.env` file in the project root and configure the required database and application environment variables.
 
-SPRING_PROFILES_ACTIVE=dev
-POSTGRES_DB=ecommerce_db
-POSTGRES_USER=mrbg
-POSTGRES_PASSWORD=1234
+Do not commit `.env` files, database credentials, JWT secrets, or other sensitive information to version control.
 
-JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-JWT_EXPIRATION_MS=86400000
+### 3. Start the Application
 
-STRIPE_SECRET_KEY=sk_test_placeholder
-STRIPE_WEBHOOK_SECRET=whsec_test_placeholder
-CHAPA_SECRET_KEY=CHASECK_TEST_placeholder
-CHAPA_WEBHOOK_SECRET=chapa_webhook_secret_placeholder
+Build and start the application using Docker Compose:
 
-### 3. Grant Script Execution Permissions
+```bash
+docker compose up --build -d
+```
 
-chmod +x run.sh
+### 4. Verify Running Containers
 
-### 4. Spin Up the Local Stack
+```bash
+docker compose ps
+```
 
-Launch the application along with PostgreSQL in background containers:
+### 5. View Application Logs
 
-./run.sh dev
+```bash
+docker compose logs -f
+```
 
-The REST API will be accessible at http://localhost:8080.
+### 6. Access the Application
 
----
+The backend application runs at:
 
-## 🛠️ Developer CLI Tools (`./run.sh`)
+```text
+http://localhost:8080
+```
 
-Use `./run.sh` to execute standard developer tasks:
+## Database Configuration
 
-| Command | Description |
-| :--- | :--- |
-| `./run.sh dev` | Builds and starts local Docker container stack with `.env.local` |
-| `./run.sh logs` | Tails live log output from the API container |
-| `./run.sh dev-down` | Stops and removes local development containers |
-| `./run.sh test` | Executes all Maven unit and slice tests |
-| `./run.sh test <Class>` | Runs a specific test class (e.g., `./run.sh test UserControllerTest`) |
-| `./run.sh test-debug <Class>` | Runs test with full stack traces (`-e -X`) |
-| `./run.sh test-report` | Displays Surefire error text reports directly in terminal |
-| `./run.sh prod-test` | Runs local container stack using `.env.production` |
-| `./run.sh clean` | Removes target folder, stops containers, and purges volumes |
+The application uses PostgreSQL as its relational database.
 
----
+| Configuration | Value |
+|---|---|
+| Database | ecommerce_db |
+| Database Version | PostgreSQL 16 |
+| Persistence | Spring Data JPA |
+| ORM | Hibernate |
 
-## ⚙️ Configuration Management
+Database connection details are managed through environment variables.
 
-Environment properties follow a 3-tier hierarchy:
+## Docker Commands
 
-1. Base Defaults: Defined in src/main/resources/application.yaml.
-2. Local Overrides: Managed via .env.local and injected into docker-compose.yml via --env-file.
-3. Production Overrides: Injected directly through Render environment variable configs.
+Start the application:
 
-⚠️ Security Warning: Never commit .env.local, .env.production, or real secret keys to source control. Ensure they are listed in .gitignore.
+```bash
+docker compose up -d
+```
 
----
+Rebuild and start:
 
-## ☁️ Production Deployment (Render + Neon Postgres)
+```bash
+docker compose up --build -d
+```
 
-The application is prepared for seamless cloud deployment on Render backed by Neon PostgreSQL:
+Stop containers:
 
-1. Dockerfile: Multi-stage build leveraging Eclipse Temurin 21 JRE, G1 Garbage Collector tuning, container memory awareness (-XX:MaxRAMPercentage=75.0), and non-root execution.
-2. Infrastructure-as-Code: Render service deployment configuration can be managed safely using render.yaml.
-3. Database: Connected securely over TLS/SSL (sslmode=require).
+```bash
+docker compose down
+```
 
----
+View application logs:
 
-## 📄 License
+```bash
+docker compose logs -f
+```
 
-This project is open-source and available under the MIT License.
+Check container status:
+
+```bash
+docker compose ps
+```
+
+## Security
+
+The application incorporates the following security mechanisms:
+
+- JWT-based stateless authentication
+- Role-based access control
+- Password hashing
+- Spring Security integration
+- Environment-based secret management
+
+## Future Enhancements
+
+- Complete order management workflow
+- Payment gateway integration
+- Automated unit and integration testing
+- Cloud deployment
+- Frontend integration
+- Improved API documentation
+
+## Author
+
+**Subrata Ghosh**
+
+GitHub: [Subrata-05](https://github.com/Subrata-05)
+
+Project Repository: [E-Commerce Backend API](https://github.com/Subrata-05/ECommerce)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
